@@ -1,4 +1,4 @@
-#include <Time.hpp>
+#include <term2d/Time.hpp>
 
 #ifdef _WIN32
 #include <windows.h>

@@ -1,4 +1,4 @@
-#include <Caret.hpp>
+#include <term2d/Caret.hpp>
 
 //Set caret position and remove caret
 #ifdef _WIN32

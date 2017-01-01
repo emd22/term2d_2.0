@@ -1,4 +1,4 @@
-#include <Size.hpp>
+#include <term2d/Size.hpp>
 
 #ifdef _WIN32
 int TermHeight() {

@@ -2,8 +2,8 @@
 
 #include <vector>
 #include <string>
-#include <ColorText.hpp>
-#include <Caret.hpp>
+#include <term2d/ColorText.hpp>
+#include <term2d/Caret.hpp>
 #include <cassert>
 
 struct Object {
@@ -18,7 +18,9 @@ class ScreenSpace {
 public:
   void Create(int width, int height, char style);
   void Edit(int x, int y, char style, int color, int precedence);
+  void RawEdit(int x, int y, char style);
   void Label(int x, int y, std::string message, int color, int precedence);
+  void RawLabel(int x, int y, std::string message);
   int FindObjAtCoords(int x, int y);
   void Print();
   void UpdateSize(int width, int height);

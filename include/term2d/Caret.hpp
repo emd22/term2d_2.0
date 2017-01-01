@@ -1,6 +1,6 @@
 #pragma once
 #include <iostream>
-#include "Size.hpp"
+#include <term2d/Size.hpp>
 
 void SetTermCursorPos(int x, int y);
 void HideTermCaret();

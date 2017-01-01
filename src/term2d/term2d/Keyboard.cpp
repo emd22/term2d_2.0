@@ -1,4 +1,4 @@
-#include <Keyboard.hpp>
+#include <term2d/Keyboard.hpp>
 
 #ifdef _WIN32
 

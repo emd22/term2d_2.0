@@ -1,4 +1,4 @@
-#include <ColorText.hpp>
+#include <term2d/ColorText.hpp>
 
 #ifdef _WIN32
 #define DEFAULT_COLOR 15

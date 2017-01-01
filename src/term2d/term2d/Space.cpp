@@ -1,4 +1,4 @@
-#include <Space.hpp>
+#include <term2d/Space.hpp>
 
 void ScreenSpace::Create(int width, int height, char style) {
   _width = width;
@@ -16,7 +16,7 @@ void ScreenSpace::Create(int width, int height, char style) {
 }
 
 void ScreenSpace::Edit(int x, int y, char style, int color, int precedence = 50) {
-  if (x <= _width && y <= _height-1 && y >= 0 && x >= 0) {
+  if (x <= _width && y < _height && y >= 0 && x >= 0) {
     Object obj;
     obj.message = style;
     obj.color = color;
@@ -27,9 +27,21 @@ void ScreenSpace::Edit(int x, int y, char style, int color, int precedence = 50)
   }
 }
 
+void ScreenSpace::RawEdit(int x, int y, char style) {
+  if (x <= _width && y < _height && y >= 0 && x >= 0) {
+    space[y][x] = style;
+  }
+}
+
 void ScreenSpace::Label(int x, int y, std::string message, int color = DEFAULT_COLOR, int precedence = 50) {
   for (int _x = 0; _x < message.length(); _x++) {
     Edit(_x+x, y, message[_x], color, precedence);
+  }
+}
+
+void ScreenSpace::RawLabel(int x, int y, std::string message) {
+  for (int _x = 0; _x < message.length(); _x++) {
+    RawEdit(_x+x, y, message[_x]);
   }
 }
 
