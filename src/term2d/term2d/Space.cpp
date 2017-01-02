@@ -1,8 +1,22 @@
 #include <term2d/Space.hpp>
 
+/*
+term2dterm2d                                                2dterm2dter   term2dterm2d
+term2dterm2d    2dterm2dter     rm2dter   dterm   term2          m2dterm  term      2dte
+    2dte       m2dt     term   erm2     2dt    m2d    2dt          dterm2 term      2dte
+    2dte      rm2d       erm2 term      2dt    m2d    2dt           term2 term      2dte
+    2dte      rm2dterm2dterm2 term      2dt    m2d    2dt         2dterm2 term      2dte
+    2dte      rm2d            term      2dt           2dt      erm2dter   term      2dte
+    2dte       m2dt     term2 term      2dt           2dt    dterm        term      2dte
+    2dte        2dterm2dter   term      2dt           2dt   2dterm2term2d term2dterm2d
+*/
+
+
+
 void ScreenSpace::Create(int width, int height, char style) {
+  // set member variables
   _width = width;
-  _height = height;
+  _height = height-1;
 
   _style = style;
 
@@ -15,14 +29,13 @@ void ScreenSpace::Create(int width, int height, char style) {
   }
 }
 
-void ScreenSpace::Edit(int x, int y, char style, int color, int precedence = 50) {
+void ScreenSpace::Edit(int x, int y, char style, int color) {
   if (x <= _width && y < _height && y >= 0 && x >= 0) {
     Object obj;
     obj.message = style;
     obj.color = color;
     obj.x = x;
     obj.y = y;
-    obj.precedence = precedence;
     objs.push_back(obj);
   }
 }
@@ -33,9 +46,9 @@ void ScreenSpace::RawEdit(int x, int y, char style) {
   }
 }
 
-void ScreenSpace::Label(int x, int y, std::string message, int color = DEFAULT_COLOR, int precedence = 50) {
+void ScreenSpace::Label(int x, int y, std::string message, int color = DEFAULT_COLOR) {
   for (int _x = 0; _x < message.length(); _x++) {
-    Edit(_x+x, y, message[_x], color, precedence);
+    Edit(_x+x, y, message[_x], color);
   }
 }
 
@@ -48,10 +61,10 @@ void ScreenSpace::RawLabel(int x, int y, std::string message) {
 int ScreenSpace::FindObjAtCoords(int x, int y) {
   for (int i = 0; i < objs.size(); i++) {
     if (objs[i].x == x && objs[i].y == y) {
-      return i;  //Text exists
+      return i;  //Entity exists
     }
   }
-  return -1; //Text does not exist
+  return -1; //Entity does not exist
 }
 
 void ScreenSpace::Print() {

@@ -11,15 +11,14 @@ struct Object {
   int color = DEFAULT_COLOR;
   int x;
   int y;
-  int precedence;
 };
 
 class ScreenSpace {
 public:
   void Create(int width, int height, char style);
-  void Edit(int x, int y, char style, int color, int precedence);
+  void Edit(int x, int y, char style, int color);
   void RawEdit(int x, int y, char style);
-  void Label(int x, int y, std::string message, int color, int precedence);
+  void Label(int x, int y, std::string message, int color);
   void RawLabel(int x, int y, std::string message);
   int FindObjAtCoords(int x, int y);
   void Print();
