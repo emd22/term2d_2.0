@@ -10,6 +10,6 @@ Ascii importing
 
 
 -----------------------
-Remember!
+Remember:
 term2d is a WIP!
 -----------------------

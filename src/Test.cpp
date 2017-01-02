@@ -33,7 +33,7 @@ int main() {
       }
 
       for (int line = 0; line < frames[frame].data_lines.size(); line++) { //read through frame and display each line to screen
-        ss.Label(0, line, frames[frame].data_lines[line], 31); //display line(color 31; foreground red)
+        ss.Label(0, line, frames[frame].data_lines[line], 37); //display line(color 37; foreground white)
       }
       ss.Print(); // print screenspace to terminal
       TimeDelay("ms", 350); // wait for 350 milliseconds
