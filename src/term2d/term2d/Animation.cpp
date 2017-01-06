@@ -1,16 +1,5 @@
 #include <term2d/Animation.hpp>
 
-/*
-term2dterm2d                                                    2dterm2dter         term2dterm2d
-term2dterm2d    2dterm2dter     rm2dter   term2   rm2dt              m2dterm        term      2dte
-    2dte       m2dt     term   erm2     2dt    dte    ter               term2       term      2dte
-    2dte      rm2d       erm2 term      2dt    dte    ter               term2       term      2dte
-    2dte      rm2dterm2dterm2 term      2dt    dte    ter             2dterm2       term      2dte
-    2dte      rm2d            term      2dt           ter           rm2dterm        term      2dte
-    2dte       m2dt     term2 term      2dt           ter          erm2d            term      2dte
-    2dte        2dterm2dter   term      2dt           ter       2dterm2dterm2dt     term2dterm2d
-*/
-
 int Animation::LoadFile(std::string filename) {
   file = std::ifstream(filename);
   if (!file.is_open()) {
@@ -22,11 +11,10 @@ int Animation::LoadFile(std::string filename) {
   }
 }
 
-void Animation::Parse() {
+int Animation::Parse() {
   std::string frame_name = "";
 
   for (int i = 0; file_data[i] != "kill"; i++) {
-
     if (i >= file_data.size()) {
       //if at end of file and no 'kill' statement
       break;
@@ -61,11 +49,34 @@ void Animation::Parse() {
           Frame frame;
           frame.name = frame_name;
           frame.data_lines = data_lines;
+          frame.id = at_frame;
+          frame.speed = speed;
           frame_name = "";
           data_lines.clear();
           frames.push_back(frame);
         }
       }
+    }
+    else if (file_data[i][0] == '\n' || file_data[i] [0] == '\0' || file_data[i][0] == '\r') {
+      at_frame--;
+      std::cout << "hit space, skipping...(frame:" << at_frame << ",line:" << i << ")\n";
+    }
+    else if (file_data[i][0] == '#' && file_data[i][1] == 's') {
+      std::string value = "";
+      if (file_data[i][2] == '(') {
+        for (int j = 2; file_data[i][j] != ')'; j++) {
+          value += file_data[i][j];
+        }
+        value.erase(value.begin(), value.begin()+1);
+        speed = (int)::atof(value.c_str());
+        std::cout << value << '\n';
+      }
+      at_frame--;
+    }
+    else {
+      std::cout << "hit unknown character '" << file_data[i][0] << "'\n";
+      i++;
+      at_frame--;
     }
   }
 }
