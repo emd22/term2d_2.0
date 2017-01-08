@@ -13,16 +13,23 @@ term2dterm2d    2dterm2dter     rm2dter   term2   rm2dt        m2dterm    rm2d  
 
 int main() {
   ScreenSpace ss;
-  RunAnimation key;
-  Animation ani;
+  RunAnimation train;
+  RunAnimation cart;
+  Animation train_ani;
+  Animation cart_ani;
 
   char pressed_key;
   ss.Create(TermWidth(), TermHeight(), '.');
-  key.Init(&ani, "key");
+  train.Init(&train_ani, "train");
+  cart.Init(&cart_ani, "cart");
 
   while (true) {
+
     pressed_key = CurKey();
-    key.Run(&ss, 10, 10, true);
+
+    cart.Run(&ss, 26, 12);
+    train.Run(&ss, 10, 10);
+
     if (pressed_key == 'q') {
       return 0;
     }
