@@ -1,97 +1,47 @@
 #include <term2d/Space.hpp>
+#include <term2d/Keyboard.hpp>
+#include <string>
+#include <iostream>
 
-void ScreenSpace::Create(int width, int height, char style) {
-  // set member variables
-  _width = width;
-  _height = height-1;
+void ScreenSpace::Create(int w, int h) {
+  _width = w;
+  _height = h;
 
-  _style = style;
-
-  for (int h = 0; h < _height; h++) {
-    for (int w = 0; w < _width; w++) {
-      line.push_back(style);
+  for (int y = 0; y < h; y++) {
+    std::string line;
+    for (int x = 0; x < w; x++) {
+      std::cout << ' ';
+      line += ' ';
     }
     space.push_back(line);
-    line.clear();
+    line = "";
   }
+}
+
+void ScreenSpace::Reset() {
+  space.clear();
+  Create(_width, _height);
 }
 
 void ScreenSpace::Edit(int x, int y, char style, int color) {
-  if (x <= _width && y < _height && y >= 0 && x >= 0) {
-    Object obj;
-    obj.message = style;
-    obj.color = color;
+  if (x < _width && y < _height && x > 0 && y > 0) {
+    CaretPos(x, y);
+    ColoredText(style, color);
+    Obj obj;
     obj.x = x;
     obj.y = y;
-    objs.push_back(obj);
+    obj.style = style;
+    obj.color = color;
   }
 }
 
-void ScreenSpace::RawEdit(int x, int y, char style) {
-  if (x <= _width && y < _height && y >= 0 && x >= 0) {
-    space[y][x] = style;
+void ScreenSpace::Label(int x, int y, std::string message, int color) {
+  for (int i = 0; i < message.length(); i++) {
+    Edit(x+i, y, message[i], color);
   }
 }
 
-void ScreenSpace::Label(int x, int y, std::string message, int color = DEFAULT_COLOR) {
-  for (int _x = 0; _x < message.length(); _x++) {
-    Edit(_x+x, y, message[_x], color);
-  }
-}
-
-void ScreenSpace::RawLabel(int x, int y, std::string message) {
-  for (int _x = 0; _x < message.length(); _x++) {
-    RawEdit(_x+x, y, message[_x]);
-  }
-}
-
-int ScreenSpace::FindObjAtCoords(int x, int y) {
-  for (int i = 0; i < objs.size(); i++) {
-    if (objs[i].x == x && objs[i].y == y) {
-      return i;  //Entity exists
-    }
-  }
-  return -1; //Entity does not exist
-}
-
-void ScreenSpace::Print() {
-  int pos;
-  assert(_height == space.size());
-  for (int y = 0; y < _height; y++) {
-    for (int x = 0; x < space[y].size(); x++) {
-      pos = FindObjAtCoords(x, y);
-      if (pos > -1) {
-        ColoredText(objs[pos].message, objs[pos].color);
-      } else {
-        std::cout << space[y][x];
-      }
-    }
-    std::cout << "\n";
-  }
-  std::cout << "\r";
-  SetTermCursorPos(0, 0);
-}
-
-void ScreenSpace::UpdateSize(int width, int height) {
-  _width = width;
-  _height = height;
-}
-
-void ScreenSpace::Reset(char style) {
-  _style = style;
-
-  line.clear();
-  space.clear();
-
-  for (int h = 0; h < _height; h++) {
-    for (int w = 0; w < _width; w++) {
-      line.push_back(style);
-    }
-    space.push_back(line);
-    line.clear();
-  }
-}
-
-void ScreenSpace::ClearObjs() {
-  objs.clear();
+void ScreenSpace::Quit() {
+  Getche();
+  exit(0);
 }

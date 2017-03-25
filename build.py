@@ -19,6 +19,12 @@ for dirpath, dirnames, filenames in os.walk(src_dir):
             print("{}/{}...".format(dirpath, file))
             command = "{} {}/{} ".format(command, dirpath, file)
 
-os.system("{}".format(command))
+if os.system("{}".format(command)):
+    #failed build
+    print("BUILD: Cannot Run - Build errors")
+else:
+    #success!
+    print("BUILD: Running...")
+    os.system("./bin/outfile")
 
-print("Build complete")
+print("BUILD: Build complete")

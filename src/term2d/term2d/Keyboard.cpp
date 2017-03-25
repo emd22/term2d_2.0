@@ -2,62 +2,48 @@
 
 #ifdef _WIN32
 
-char CurKey()
-{
+char Getch() {
     if (_kbhit()) {
         return (char)_getch();
     }
     return '\0';
 }
 
-void DisableKeyPrint() { }
-void EnableKeyPrint() { }
-
 #else
 
-void DisableKeyPrint() {
-  int temp = system("stty -echo");
-}
-void EnableKeyPrint() {
-  int temp = system("stty echo");
-}
+static struct termios old, _new;
 
-int _kbhit() {
-    static const int STDIN = 0;
-    static bool initialized = false;
-
-    if (! initialized) {
-        // Use termios to turn off line buffering
-        termios term;
-        tcgetattr(STDIN, &term);
-        term.c_lflag &= ~ICANON;
-        tcsetattr(STDIN, TCSANOW, &term);
-        setbuf(stdin, NULL);
-        initialized = true;
-    }
-
-    int bytesWaiting;
-    ioctl(STDIN, FIONREAD, &bytesWaiting);
-    return bytesWaiting;
+/* Initialize new terminal i/o settings */
+void InitTermios(int echo) {
+    tcgetattr(0, &old); /* grab old terminal i/o settings */
+    _new = old; /* make new settings same as old settings */
+    _new.c_lflag &= ~ICANON; /* disable buffered i/o */
+    _new.c_lflag &= echo ? ECHO : ~ECHO; /* set echo mode */
+    tcsetattr(0, TCSANOW, &_new); /* use these new terminal i/o settings now */
 }
 
+/* Restore old terminal i/o settings */
+void ResetTermios(void) {
+    tcsetattr(0, TCSANOW, &old);
+}
 
-char CurKey()
-{
-    if (_kbhit()) {
-        struct termios oldattr, newattr;
-        int ch;
-        tcgetattr( STDIN_FILENO, &oldattr );
-        newattr = oldattr;
-        newattr.c_lflag &= ~( ICANON | ECHO );
-        tcsetattr( STDIN_FILENO, TCSANOW, &newattr );
-        ch = getchar();
-        tcsetattr( STDIN_FILENO, TCSANOW, &oldattr );
-        return ch;
-    } else {
-        return '\0';
+/* Read 1 character - echo defines echo mode */
+char getch_(int echo) {
+    char ch;
+    InitTermios(echo);
+    ch = getchar();
+    ResetTermios();
+    return ch;
+}
 
-    }
+/* Read 1 character without echo */
+char Getch() {
+    return getch_(0);
+}
+
+/* Read 1 character with echo */
+char Getche() {
+    return getch_(1);
 }
 
 #endif

@@ -2,8 +2,7 @@
 
 //Set caret position and remove caret
 #ifdef _WIN32
-void SetTermCursorPos(int x, int y)
-{
+void CaretPos(int x, int y) {
     COORD cur;
     cur.X = x;
     cur.Y = y;vec
@@ -35,23 +34,14 @@ void ShowTermCaret()
 //LINUX/UNIX
 #include <cstdio>
 
-void SetTermCursorPos(int x, int y)
-{
+void CaretPos(int x, int y) {
     std::printf("\033[%d;%dH", y, x);
 }
 
-void HideTermCaret()
-{
+void HideTermCaret() {
     std::fputs("\e[?25l", stdout);
 }
-void ShowTermCaret()
-{
+void ShowTermCaret() {
     std::fputs("\e[?25h", stdout);
 }
 #endif
-//A quick way to clear screen using newlines
-void ClearScreen() {
-  for (int i = 0; i < TermHeight(); i++) {
-    std::cout << "\n";
-  }
-}

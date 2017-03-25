@@ -3,21 +3,18 @@
 #ifdef _WIN32
 #include <conio.h>
 
-char CurKey();
+char Getch();
 
 #else
 #include <unistd.h>
 #include <termios.h>
 #include <stdio.h>
-#include <stdlib.h>
+#include <stdlib.h>       
 #include <sys/select.h>
 #include <sys/ioctl.h>
 #include <stropts.h>
 
-void DisableKeyPrint();
-void EnableKeyPrint();
-
-int _kbhit();
-char CurKey();
+char Getch();
+char Getche();
 
 #endif

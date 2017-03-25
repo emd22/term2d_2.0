@@ -4,8 +4,6 @@
 #include <map>
 #include <array>
 
-bool can_beep = true;
-
 #ifdef _WIN32
 #include <WinBase.h>
 void beep(int freq = 440, int len = 200){

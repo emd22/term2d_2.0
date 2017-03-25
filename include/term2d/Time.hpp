@@ -1,5 +1,8 @@
 #pragma once
 
+#include <chrono>
+#include <thread>
+
 #ifdef _WIN32
 #include <windows.h>
 #elif _POSIX_C_SOURCE >= 199309L
@@ -10,4 +13,4 @@
 
 #include <string>
 
-void TimeDelay(std::string option, int milliseconds);
+void TimeDelay(int milliseconds);
