@@ -29,16 +29,17 @@ public:
     void DeselectButton(int id);
     void RemButton(int index);
     void TitlebarKeys(char k);
-    int Menu(std::vector<std::string> titles, int color);
-    void RemMenu();
+    void Menu(std::vector<std::string> titles, int color, int titlebar_index);
+    void RemMenu(int titlebar_index);
     bool OpenCloseMenu();
+    void ClearScreen();
 private:
     std::vector<SButton> buttons;
-    std::vector<char> Titlebar_keys;
+    std::vector<char> titlebar_keys;
     std::vector<Title> _titles;
     std::vector<std::string> menu_titles;
     ScreenSpace *ss;
-    int si = 0;
+    int proper_index = 0;
     bool did_init = false;
     bool menu_open = false;
 };

@@ -2,34 +2,44 @@
 
 void FMenu(GUI *gui) {
     if (gui->OpenCloseMenu()) {
-        gui->Menu({"Test1", "Test2", "Test3", "Test4"}, 42);
+        gui->Menu({"Thi", "Test2", "More Tests", "Fourth Test"}, 42, 0);
     }
     else {
-        gui->RemMenu();
+        gui->RemMenu(0);
     }
 }
 
 void EMenu(GUI *gui) {
     if (gui->OpenCloseMenu()) {
-        gui->Menu({"More1", "More2"}, 42);
+        gui->Menu({"More Tests1", "More Tests Again"}, 42, 1);
     }
     else {
-        gui->RemMenu();
+        gui->RemMenu(1);
+    }
+}
+
+void VMenu(GUI *gui) {
+    if (gui->OpenCloseMenu()) {
+        gui->Menu({"Other More Tests", "Other_More_Tests2"}, 42, 2);
+    }
+    else {
+        gui->RemMenu(2);
     }
 }
 
 int main() {
-    std::cout << "\e[1;1H\e[2J"; // clear screen
     int buttonindex = 0;
     int maxindex = 0;
     ScreenSpace ss;
     GUI gui;
     
+    gui.ClearScreen();
     ss.Create(50, 50);
 
     gui.Init(&ss);
     gui.Titlebar({Title {"File", &FMenu},
-                  Title {"Edit", &EMenu}});
+                  Title {"Edit", &EMenu},
+                  Title {"View", &VMenu}});
 
     gui.Button(10, 10, "Test1", 47);
     gui.Button(20, 10, "Test2", 47);
