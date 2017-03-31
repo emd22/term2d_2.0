@@ -43,7 +43,7 @@ void GUI::ClearScreen() {
     std::cout << "\e[1;1H\e[2J"; // clear screen
 }
 
-void GUI::Button(int x, int y, std::string name, int color) {
+void GUI::Button(int x, int y, std::string name, int color, std::function<void(GUI *)> callback) {
     if(!did_init) { return; }
     
     SButton button;
@@ -51,6 +51,7 @@ void GUI::Button(int x, int y, std::string name, int color) {
     button.x = x;
     button.y = y;
     button.color = color;
+    button.callback = callback;
 
     ss->Label(x, y, name, color);
 
@@ -66,6 +67,12 @@ int GUI::SelectButton(int id, int highlight) {
     return buttons.size();
 }
 
+void GUI::CheckButton(int id) {
+    if (id < buttons.size()) {
+        buttons[id].callback(this);
+    }
+}
+
 void GUI::DeselectButton(int id) {
     if(!did_init) { return; }
 
@@ -74,31 +81,31 @@ void GUI::DeselectButton(int id) {
     }
 }
 
-void GUI::Menu(std::vector<std::string> titles, int color, int titlebar_index) {
-    menu_titles = titles;
+void GUI::Menu(std::vector<Option> options, int color, int titlebar_index) {
+    _options = options;
     proper_index = 0;
     maxlen = 0;
-    
-    for (int i = 0; i < titles.size(); i++) {
-        if (titles[i].length() > maxlen) {
-            maxlen = titles[i].length();
+
+    for (int i = 0; i < options.size(); i++) {
+        if (options[i].t.length() > maxlen) {
+            maxlen = options[i].t.length();
         }
     }
     for (int i = 0; i < titlebar_index; i++) {
         proper_index += _titles[i].t.length()+1; // This is used for menu positioning(under corrisponding title)
     }
-    Rect(2+proper_index, 2, maxlen, titles.size(), ' ', color);
-    for (int i = 0; i < titles.size(); i++) {
-        Button(2+proper_index, 2+i, titles[i], color);
+    Rect(2+proper_index, 2, maxlen, options.size(), ' ', color);
+    for (int i = 0; i < options.size(); i++) {
+        Button(2+proper_index, 2+i, options[i].t, color, options[i].callback);
     }
 }
 
 void GUI::RemMenu(int titlebar_index) {
     if(!did_init) { return; }
 
-    for (int i = 0; i < menu_titles.size(); i++) {
-        for (int j = 0; j < menu_titles[i].length(); j++) {
-            ss->Erase(2+j+proper_index, 2+i, maxlen, menu_titles[i].length());
+    for (int i = 0; i < _options.size(); i++) {
+        for (int j = 0; j < _options[i].t.length(); j++) {
+            ss->Erase(2+j+proper_index, 2+i, maxlen, _options[i].t.length());
         }
         buttons.pop_back();
     }
