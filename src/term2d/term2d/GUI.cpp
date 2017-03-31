@@ -13,6 +13,17 @@ void GUI::TitlebarKeys(char k) {
     }
 }
 
+void GUI::Rect(int x, int y, int w, int h, char style, int color) {
+    std::string line = "";
+
+    for (int i = 0; i < w; i++) {
+        line += style;
+    }
+    for (int i = 0; i < h; i++) {
+        ss->Label(x, y+i, line, color);
+    }
+}
+
 void GUI::Titlebar(std::vector<Title> titles) {
     if(!did_init) { return; }
 
@@ -66,20 +77,28 @@ void GUI::DeselectButton(int id) {
 void GUI::Menu(std::vector<std::string> titles, int color, int titlebar_index) {
     menu_titles = titles;
     proper_index = 0;
+    maxlen = 0;
     
-    for (int i = 0; i < titlebar_index; i++) {
-        proper_index += _titles[i].t.length()+1;
+    for (int i = 0; i < titles.size(); i++) {
+        if (titles[i].length() > maxlen) {
+            maxlen = titles[i].length();
+        }
     }
-
+    for (int i = 0; i < titlebar_index; i++) {
+        proper_index += _titles[i].t.length()+1; // This is used for menu positioning(under corrisponding title)
+    }
+    Rect(2+proper_index, 2, maxlen, titles.size(), ' ', color);
     for (int i = 0; i < titles.size(); i++) {
         Button(2+proper_index, 2+i, titles[i], color);
     }
 }
 
 void GUI::RemMenu(int titlebar_index) {
+    if(!did_init) { return; }
+
     for (int i = 0; i < menu_titles.size(); i++) {
         for (int j = 0; j < menu_titles[i].length(); j++) {
-            ss->Erase(2+j+proper_index, 2+i, menu_titles.size());
+            ss->Erase(2+j+proper_index, 2+i, maxlen, menu_titles[i].length());
         }
         buttons.pop_back();
     }

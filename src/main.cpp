@@ -40,6 +40,7 @@ int main() {
     gui.Titlebar({Title {"File", &FMenu},
                   Title {"Edit", &EMenu},
                   Title {"View", &VMenu}});
+    
 
     gui.Button(10, 10, "Test1", 47);
     gui.Button(20, 10, "Test2", 47);

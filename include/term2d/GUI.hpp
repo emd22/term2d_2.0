@@ -25,6 +25,7 @@ public:
     void Init(ScreenSpace *s);
     void Titlebar(std::vector<Title> titles);
     void Button(int x, int y, std::string name, int color);
+    void Rect(int x, int y, int w, int h, char style, int color);
     int SelectButton(int id, int highlight);
     void DeselectButton(int id);
     void RemButton(int index);
@@ -40,6 +41,7 @@ private:
     std::vector<std::string> menu_titles;
     ScreenSpace *ss;
     int proper_index = 0;
+    int maxlen = 0;
     bool did_init = false;
     bool menu_open = false;
 };

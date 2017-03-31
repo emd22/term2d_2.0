@@ -28,10 +28,14 @@ void ScreenSpace::Label(int x, int y, std::string message, int color) {
         Edit(x+i, y, message[i], color);
     }
 }
-void ScreenSpace::Erase(int x, int y, int len) {
+void ScreenSpace::Erase(int x, int y, int len, int h) {
+    std::string line = "";
+    for (int i = 0; i < h; i++) {
+        line += ' ';
+    }
     for (int i = 0; i < len; i++) {
         CaretPos(x+i, y);
-        std::cout << ' ';
+        std::cout << line;
     }
 }
 
