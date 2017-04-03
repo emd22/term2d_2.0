@@ -1,13 +1,15 @@
 #include <Example/Main.hpp>
 
-void Button1(GUI *gui) {
-    gui->Rect(20, 15, 5, 5, '$', DEFAULT_COLOR);
+void noop(GUI *gui, ScreenSpace *ss) {}
+
+void NewPage(GUI *gui, ScreenSpace *ss) {
+    ss->Create();
+    SecWidgets(gui, ss);
 }
 
-void FMenu(GUI *gui) {
+void FMenu(GUI *gui, ScreenSpace *ss) {
     if (gui->OpenCloseMenu()) {
-        gui->Menu({Option {"New", Button1},
-                   Option {"Open", Button1}}, 42, 0);
+        gui->Menu({Option {"New", &NewPage}}, 42, 0);
     }
     else {
         gui->RemMenu(0);
@@ -35,6 +37,14 @@ void Examples::Keypress() {
     maxindex = gui->SelectButton(keyindex, 44);
 }
 
+void MainWidgets(GUI *gui, ScreenSpace *ss) {
+    gui->Titlebar({Title {"Page", &FMenu}});
+}
+
+void SecWidgets(GUI *gui, ScreenSpace *ss) {
+    gui->Button(10, 10, "Goto previous page", 47, &MainWidgets);
+}
+
 Examples::Examples(GUI *g, ScreenSpace *s) {
     gui = g;
     ss = s;
@@ -44,15 +54,11 @@ int main() {
     GUI gui;
     ScreenSpace ss;
     Examples examples(&gui, &ss);
-
-    gui.ClearScreen();
-    ss.Create(50, 50);
-
+    
     gui.Init(&ss);
-    gui.Titlebar({Title {"File", &FMenu}});
+    ss.Create();
 
-    gui.Button(10, 10, "Button1", 47, &Button1);
-    gui.Button(20, 10, "Button2", 47, &Button1);
+    MainWidgets(&gui, &ss);
 
     while (true) {
         examples.Keypress();

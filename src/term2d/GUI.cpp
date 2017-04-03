@@ -33,7 +33,12 @@ void GUI::Titlebar(std::vector<Title> titles) {
         for (int j = 0; j < titles.size(); j++) {
             ss->Label(i, 1, titles[j].t, 43);
             i += titles[j].t.length()+1;
-            titlebar_keys.push_back(std::tolower(titles[j].t[0]));
+            if (titles[j].key == ' '){
+                titlebar_keys.push_back(std::tolower(titles[j].t[0]));
+            }
+            else {
+                titlebar_keys.push_back(titles[j].key);
+            }
         }
         return;
     }
@@ -43,7 +48,7 @@ void GUI::ClearScreen() {
     std::cout << "\e[1;1H\e[2J"; // clear screen
 }
 
-void GUI::Button(int x, int y, std::string name, int color, std::function<void(GUI *)> callback) {
+void GUI::Button(int x, int y, std::string name, int color, std::function<void(GUI *, ScreenSpace *)> callback) {
     if(!did_init) { return; }
     
     SButton button;
@@ -69,7 +74,7 @@ int GUI::SelectButton(int id, int highlight) {
 
 void GUI::CheckButton(int id) {
     if (id < buttons.size()) {
-        buttons[id].callback(this);
+        buttons[id].callback(this, &ss);
     }
 }
 

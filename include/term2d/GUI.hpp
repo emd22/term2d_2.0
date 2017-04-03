@@ -10,7 +10,8 @@ class GUI;
 
 struct Title {
     std::string t;
-    std::function<void(GUI *)> callback;
+    std::function<void(GUI *, ScreenSpace *ss)> callback;
+    char key = ' ';
 };
 
 struct SButton {
@@ -18,23 +19,24 @@ struct SButton {
     int y;
     int color;
     std::string title;
-    std::function<void(GUI *)> callback;
+    std::function<void(GUI *, ScreenSpace *ss)> callback;
 };
 
 struct Option {
     std::string t;
-    std::function<void(GUI *)> callback;
+    std::function<void(GUI *, ScreenSpace *ss)> callback;
 };
 
 class GUI {
 public:
     void Init(ScreenSpace *s);
     void Titlebar(std::vector<Title> titles);
-    void Button(int x, int y, std::string name, int color, std::function<void(GUI *)> callback);
+    void Button(int x, int y, std::string name, int color, std::function<void(GUI *, ScreenSpace *)> callback);
     void Rect(int x, int y, int w, int h, char style, int color);
     int SelectButton(int id, int highlight);
     void DeselectButton(int id);
     void CheckButton(int id);
+    void ClearWidgets();
     void RemButton(int index);
     void TitlebarKeys(char k);
     void Menu(std::vector<Option> options, int color, int titlebar_index);
