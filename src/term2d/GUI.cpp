@@ -8,7 +8,7 @@ void GUI::Init(ScreenSpace *s) {
 void GUI::TitlebarKeys(char k) {
     for (int i = 0; i < titlebar_keys.size(); i++) {
         if (k == titlebar_keys[i]) {
-            _titles[i].callback(this);
+            _titles[i].callback(this, ss);
         }
     }
 }
@@ -74,7 +74,7 @@ int GUI::SelectButton(int id, int highlight) {
 
 void GUI::CheckButton(int id) {
     if (id < buttons.size()) {
-        buttons[id].callback(this, &ss);
+        buttons[id].callback(this, ss);
     }
 }
 
