@@ -14,7 +14,7 @@ char Getch();
 #include <sys/ioctl.h>
 #include <stropts.h>
 
-char Getch();
-char Getche();
+int Getch();
+int Getche();
 
 #endif

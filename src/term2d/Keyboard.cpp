@@ -1,4 +1,5 @@
 #include <term2d/Keyboard.hpp>
+#include <iostream>
 
 #ifdef _WIN32
 
@@ -28,21 +29,29 @@ void ResetTermios(void) {
 }
 
 /* Read 1 character - echo defines echo mode */
-char getch_(int echo) {
+int getch_(int echo) {
     char ch;
     InitTermios(echo);
     ch = getchar();
+
+    if (ch == '\033') {
+        getchar();           //This is for escaping arrow keys (\033[A)
+        char type = getchar();
+        ResetTermios();
+        return 500+(int)type;//return something out of ascii range so i dont mess anything up
+    }
+
     ResetTermios();
     return ch;
 }
 
 /* Read 1 character without echo */
-char Getch() {
+int Getch() {
     return getch_(0);
 }
 
 /* Read 1 character with echo */
-char Getche() {
+int Getche() {
     return getch_(1);
 }
 

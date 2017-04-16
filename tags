@@ -9,5 +9,5 @@ build.py	build.py	1;"	kind:file	line:1
 command	build.py	/^            command = "{} {}\/{} ".format(command, dirpath, file)$/;"	kind:variable	line:20
 compiler	build.py	/^compiler = ""$/;"	kind:variable	line:3
 compiler	build.py	/^compiler = "g++"$/;"	kind:variable	line:4
-options	build.py	/^options = "-g"$/;"	kind:variable	line:6
+options	build.py	/^options = "-g -O2"$/;"	kind:variable	line:6
 src_dir	build.py	/^src_dir = ".\/src"$/;"	kind:variable	line:8

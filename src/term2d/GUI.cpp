@@ -1,3 +1,5 @@
+// GUI.CPP
+
 #include <term2d/GUI.hpp>
 
 void GUI::Init(ScreenSpace *s) {
@@ -24,24 +26,108 @@ void GUI::Rect(int x, int y, int w, int h, char style, int color) {
     }
 }
 
-void GUI::Titlebar(std::vector<Title> titles) {
+void GUI::Modal(int w, int h, const std::string &message, const bool &input) {
+    int x = TermWidth()/2-(w/2);
+    int y = TermHeight()/2-(h/2);
+    Rect(x, y, w, h, '=', DEFAULT_COLOR);
+    ss->Label(x+1, y+1, message, DEFAULT_COLOR);
+
+    if (input) {
+        std::string message = "";
+
+        while (true) {
+            char k = Getch();
+            if (k == 127) {
+                message.pop_back();
+            }
+            else if (k == '\n') {
+                return;
+            }
+            else {
+                message += k;
+            }
+
+            ss->Erase(x+1, y+3, message.length(), 1);
+            ss->Label(x+1, y+3, message, 0);
+
+            TimeDelay(25);
+        }
+    }
+    else {
+        while (Getch() != '\n');
+    }
+}
+
+void GUI::Titlebar(const std::vector<Title> &titles, int y, bool tbk) {
     if(!did_init) { return; }
 
     _titles = titles;
 
     for (int i = 2; i < TermWidth(); i++) {
         for (int j = 0; j < titles.size(); j++) {
-            ss->Label(i, 1, titles[j].t, 43);
+            ss->Label(i, y+1, titles[j].t, 43);
             i += titles[j].t.length()+1;
-            if (titles[j].key == ' '){
-                titlebar_keys.push_back(std::tolower(titles[j].t[0]));
-            }
-            else {
-                titlebar_keys.push_back(titles[j].key);
+            if (tbk) {
+                if (titles[j].key == ' ') {
+                    titlebar_keys.push_back(std::tolower(titles[j].t[0]));
+                }
+                else {
+                    titlebar_keys.push_back(titles[j].key);
+                }
             }
         }
         return;
     }
+}
+
+void GUI::Messagebar(std::string text, int position) {
+    int pos = 0;
+    if (position == POSITION::CENTER) {
+        pos = TermWidth()/2-text.length()/2;
+    }
+    else if (position == POSITION::LEFT) {
+        pos = 1;
+    }
+    else if (position == POSITION::RIGHT) {
+        pos = TermWidth()-text.length();
+    }
+
+    ss->Label(pos, TermHeight(), text, 0);
+}
+
+void GUI::ClearMessage(int position) {
+    int pos = 0;
+    int maxpos = TermWidth()/3;
+    int len = maxpos;
+    
+    if (position == POSITION::CENTER) {
+        pos = maxpos;
+    }
+    else if (position == POSITION::LEFT) {
+        pos = maxpos*2;
+    }
+    else if (position == POSITION::RIGHT) {
+        pos = 0;
+    }
+    ss->Erase(pos, TermHeight()-1, len, 1);
+}
+
+void GUI::ClearWidgets() {
+    Rect(0, 0, TermWidth(), TermHeight(), ' ', DEFAULT_COLOR);
+
+    buttons.clear();
+    titlebar_keys.clear();
+    _titles.clear();
+    menu_open = false;
+}
+
+void GUI::PopButton() {
+    buttons.pop_back();
+}
+
+void GUI::ClearTitlebar() {
+    titlebar_keys.clear();
+    _titles.clear();
 }
 
 void GUI::ClearScreen() {
