@@ -26,29 +26,33 @@ void GUI::Rect(int x, int y, int w, int h, char style, int color) {
     }
 }
 
-void GUI::Modal(int w, int h, const std::string &message, const bool &input) {
+void GUI::Modal(int w, int h, const std::vector<std::string> &message, const bool &input) {
     int x = TermWidth()/2-(w/2);
-    int y = TermHeight()/2-(h/2);
+    int y = TermHeight()/2-(h/2)-1;
+    h++;
     Rect(x, y, w, h, '=', DEFAULT_COLOR);
-    ss->Label(x+1, y+1, message, DEFAULT_COLOR);
+
+    for (int i = 0; i < message.size(); i++) {
+        ss->Label(x+1, y+i+1, message[i], 0);
+    }
 
     if (input) {
-        std::string message = "";
+        std::string text = "";
 
         while (true) {
             char k = Getch();
             if (k == 127) {
-                message.pop_back();
+                ss->Edit(x+text.length(), y+3, '=', DEFAULT_COLOR);
+                text.pop_back();
             }
             else if (k == '\n') {
                 return;
             }
             else {
-                message += k;
+                text += k;
             }
 
-            ss->Erase(x+1, y+3, message.length(), 1);
-            ss->Label(x+1, y+3, message, 0);
+            ss->Label(x+1, y+3, text, 0);
 
             TimeDelay(25);
         }

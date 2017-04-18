@@ -58,8 +58,6 @@ void ReloadWidgets(CB_PARAM) {
 void noop(CB_PARAM) {}
 void Titlebar(CB_PARAM) {
     int y = 1;
-
-    gui->Modal(50, 10, "This is a test.", true);
     
     while (true) {
         char k = Getch();
@@ -249,6 +247,7 @@ int main() {
     gui.Init(&ss);
     ss.Create();
 
+    gui.Modal(50, 10, {"Dingus", "mingus"}, false);
     MainWidgets(&gui, &ss);
 
     while (true) {

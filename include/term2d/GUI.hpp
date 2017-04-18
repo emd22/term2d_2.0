@@ -40,7 +40,7 @@ class GUI {
 public:
     void Init(ScreenSpace *s);
     void Titlebar(const std::vector<Title> &titles, int y, bool tbk = true);
-    void Modal(int w, int h, const std::string &message, const bool &input);
+    void Modal(int w, int h, const std::vector<std::string> &message, const bool &input);
     void Button(int x, int y, std::string name, int color, std::function<void(GUI *, ScreenSpace *)> callback);
     void Rect(int x, int y, int w, int h, char style, int color);
     void Messagebar(std::string text, int position);
