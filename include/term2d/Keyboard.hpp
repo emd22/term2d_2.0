@@ -1,5 +1,13 @@
 #pragma once
 
+enum KEYS {
+    BACKSPACE = 127,
+    TAB = 9,
+    SPACE = ' ',
+    RETURN = '\n',
+    RETURN_OTHER = '\r',
+};
+
 #ifdef _WIN32
 #include <conio.h>
 

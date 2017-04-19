@@ -247,7 +247,17 @@ int main() {
     gui.Init(&ss);
     ss.Create();
 
-    gui.Modal(50, 10, {"Dingus", "mingus"}, false);
+    Color color;
+    color.back_color = 45;
+    color.text_color = 44;
+    color.textbox_color = 47;
+    color.textbox_back_color = 44;
+
+    gui.Modal(50, 10, {"Dingus",
+                       "mingus",
+                       "swibbity swoop", 
+                       "you better watch out you little poop"}, 
+                       true, color);
     MainWidgets(&gui, &ss);
 
     while (true) {

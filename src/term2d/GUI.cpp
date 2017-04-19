@@ -26,36 +26,66 @@ void GUI::Rect(int x, int y, int w, int h, char style, int color) {
     }
 }
 
-void GUI::Modal(int w, int h, const std::vector<std::string> &message, const bool &input) {
+std::string GUI::Textbox(int x, int y, int len, Color color) {
+    std::string text = "";
+    int overbounds = 0;
+
+    Rect(x, y, len+1, 1, ' ', color.textbox_back_color);
+
+    while (true) {
+        char k = Getch();
+
+        if (text.length() >= len) {
+            overbounds = text.length()-len;
+        }
+
+        if (k == KEYS::TAB) {
+            return text;
+        }
+
+        if (k == KEYS::BACKSPACE) {
+            ss->Label(x+len-1, y, "  ", color.textbox_back_color);
+            if (text.length() > 0) {
+                text.pop_back();
+                
+                if (overbounds == 0) {
+                    ss->Edit(x+text.length(), y, ' ', color.textbox_back_color);
+                }
+                if (text.length() == 0) {
+                    CaretPos(x, y);
+                }
+            }
+            else {
+                ss->Edit(x, y, ' ', color.textbox_back_color);
+                CaretPos(x, y);
+            }
+        }
+        else if (k == KEYS::RETURN) {
+            return text;
+        }
+        else {
+            text += k;
+        }
+
+        ss->Label(x, y, text.substr(overbounds), color.textbox_color);
+
+        TimeDelay(25);
+    }
+}
+
+void GUI::Modal(int w, int h, const std::vector<std::string> &message, const bool &input, Color color) {
     int x = TermWidth()/2-(w/2);
     int y = TermHeight()/2-(h/2)-1;
-    h++;
-    Rect(x, y, w, h, '=', DEFAULT_COLOR);
+    Rect(x, y, w, h+1, '=', color.back_color);
+
+    int ms = message.size();
 
     for (int i = 0; i < message.size(); i++) {
-        ss->Label(x+1, y+i+1, message[i], 0);
+        ss->Label(x+1, y+i+1, message[i], color.text_color);
     }
 
     if (input) {
-        std::string text = "";
-
-        while (true) {
-            char k = Getch();
-            if (k == 127) {
-                ss->Edit(x+text.length(), y+3, '=', DEFAULT_COLOR);
-                text.pop_back();
-            }
-            else if (k == '\n') {
-                return;
-            }
-            else {
-                text += k;
-            }
-
-            ss->Label(x+1, y+3, text, 0);
-
-            TimeDelay(25);
-        }
+        Textbox(x+1, y+ms+2, 10, color);
     }
     else {
         while (Getch() != '\n');
